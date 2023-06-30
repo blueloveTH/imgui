@@ -2,6 +2,29 @@ import ImGui
 from linalg import *
 from c import *
 
+
+# with 'f' has bug when it is in functions (STORE_NAME does not work!!)
+with open("ImGui.pyi", "w") as f:
+    f.write('from c import void_p\n')
+    f.write('from linalg import vec2, vec3, vec4\n')
+    f.write('\n')
+    # write functions
+    for name, value in ImGui.__dict__.items():
+        if hasattr(value, "__signature__"):
+            f.write(f'def {value.__signature__}:\n')
+            doc = value.__doc__
+            if doc:
+                f.write(f'    """{doc}"""\n')
+            else:
+                f.write(f'    pass\n')
+            f.write("\n")
+    f.write("\n")
+    # first write enums
+    for name, value in ImGui.__dict__.items():
+        if name.startswith("ImGui") and type(value) is int:
+            f.write(f"{name} = {value}\n")
+
+
 count = 0
 
 v1 = float_()
@@ -20,7 +43,6 @@ def update():
 
     if v3.read_bool():
         ImGui.ShowDemoWindow(v3.addr())
-    print(v3.read_bool())
 
     ImGui.Begin("Hello, world!")
     ImGui.Text("This is some useful text.")

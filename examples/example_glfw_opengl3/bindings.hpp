@@ -510,7 +510,7 @@ R"(
         PK_VAR_LAMBDA(ImGui::GetFontSize())
         );
 
-    vm->bind(imgui, "GetFontTexUvWhitePixel() -> ImVec2",
+    vm->bind(imgui, "GetFontTexUvWhitePixel() -> vec2",
         "get UV coordinate for a while pixel, useful to draw custom shapes via the ImDrawList API",
         PK_VAR_LAMBDA(ImGui::GetFontTexUvWhitePixel())
         );
@@ -1373,7 +1373,7 @@ R"(
             return VAR(ret);
         });
 
-    vm->bind(imgui, "EndChildFrame() -> void",
+    vm->bind(imgui, "EndChildFrame()",
         "always call EndChildFrame() regardless of BeginChildFrame() return values (which indicates a collapsed/clipped window)",
         [](VM* vm, ArgsView args){
             ImGui::EndChildFrame();
@@ -1488,7 +1488,7 @@ R"(
             return VAR(ret);
         });
 
-    vm->bind(imgui, "IsMouseHoveringRect(r_min: ImVec2, r_max: ImVec2, clip=True) -> bool",
+    vm->bind(imgui, "IsMouseHoveringRect(r_min: vec2, r_max: vec2, clip=True) -> bool",
         "is mouse hovering given bounding rect (in screen space). clipped by current clipping settings, but disregarding of other consideration of focus/window ordering/popup-block.",
         [](VM* vm, ArgsView args){
             ImVec2 r_min = CAST(ImVec2, args[0]);
@@ -1498,7 +1498,7 @@ R"(
             return VAR(ret);
         });
 
-    vm->bind(imgui, "IsMousePosValid(mouse_pos: ImVec2=None) -> bool",
+    vm->bind(imgui, "IsMousePosValid(mouse_pos: vec2 = None) -> bool",
         "by convention we use (-FLT_MAX,-FLT_MAX) to denote that there is no mouse available",
         [](VM* vm, ArgsView args){
             ImVec2 mouse_pos = CAST(ImVec2, args[0]);
