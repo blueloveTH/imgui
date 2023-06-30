@@ -7905,12 +7905,13 @@ __SUBSCR_END:
                 EXPR(false);
                 consume(TK("as"));
                 consume(TK("@id"));
-                StrName name(prev().str());
-                ctx()->emit(OP_STORE_NAME, name.index, prev().line);
-                ctx()->emit(OP_LOAD_NAME, name.index, prev().line);
+                Expr_ e = make_expr<NameExpr>(prev().str(), name_scope());
+                bool ok = e->emit_store(ctx());
+                if(!ok) SyntaxError();
+                e->emit(ctx());
                 ctx()->emit(OP_WITH_ENTER, BC_NOARG, prev().line);
                 compile_block_body();
-                ctx()->emit(OP_LOAD_NAME, name.index, prev().line);
+                e->emit(ctx());
                 ctx()->emit(OP_WITH_EXIT, BC_NOARG, prev().line);
             } break;
             /*************************************************/
@@ -8269,7 +8270,7 @@ public:
 
 } // namespace pkpy
 
-// generated on 2023-07-01 00:33:40
+// generated on 2023-07-01 00:57:34
 #include <map>
 #include <string>
 
@@ -8834,8 +8835,10 @@ inline void add_module_c(VM* vm){
     add_refl_type("bool", sizeof(bool), {});
     add_refl_type("void_p", sizeof(void*), {});
 
+    PyObject* void_p_t = mod->attr("void_p");
     for(const char* t: {"char", "uchar", "short", "ushort", "int", "uint", "long", "ulong", "longlong", "ulonglong", "float", "double", "bool"}){
         mod->attr().set(Str(t) + "_", VAR_T(C99ReflType, _refl_types[t]));
+        mod->attr().set(Str(t) + "_p", void_p_t);
     }
 }
 

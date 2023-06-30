@@ -86,7 +86,7 @@ inline void add_module_imgui(VM* vm){
         );
 
     // Demo, Debug, Information
-    vm->bind(imgui, "ShowDemoWindow(p_open: void_p = None)",
+    vm->bind(imgui, "ShowDemoWindow(p_open: bool_p = None)",
         "create Demo window. demonstrate most ImGui features. call this to learn about the library! try to make it always available in your application!",
         [](VM* vm, ArgsView args){
             bool* p_open = CAST(bool*, args[0]);
@@ -116,7 +116,7 @@ inline void add_module_imgui(VM* vm){
         );
 
     // Windows
-    vm->bind(imgui, "Begin(name: str, p_open: void_p = None, flags=0) -> bool",
+    vm->bind(imgui, "Begin(name: str, p_open: bool_p = None, flags=0) -> bool",
 R"(
 - Begin() = push window to the stack and start appending to it. End() = pop window from the stack.
 - Passing 'bool* p_open != NULL' shows a window-closing widget in the upper-right corner of the window,
@@ -776,7 +776,7 @@ R"(
             return VAR(ret);
         });
 
-    vm->bind(imgui, "Checkbox(label: str, v: void_p) -> bool",
+    vm->bind(imgui, "Checkbox(label: str, v: bool_p) -> bool",
         [](VM* vm, ArgsView args){
             const char* label = CAST(CString, args[0]);
             bool* v = CAST(bool*, args[1]);
@@ -784,7 +784,7 @@ R"(
             return VAR(ret);
         });
 
-    vm->bind(imgui, "CheckboxFlags(label: str, flags: void_p, flags_value: int) -> bool",
+    vm->bind(imgui, "CheckboxFlags(label: str, flags: int_p, flags_value: int) -> bool",
         [](VM* vm, ArgsView args){
             const char* label = CAST(CString, args[0]);
             int* flags = CAST(int*, args[1]);
@@ -859,7 +859,7 @@ R"(
         "only call EndCombo() if BeginCombo() returns true!",
         PK_ACTION(ImGui::EndCombo()));
 
-    vm->bind(imgui, "Combo(label: str, current_item: void_p, items: list[str], popup_max_height_in_items=-1)",
+    vm->bind(imgui, "Combo(label: str, current_item: int_p, items: list[str], popup_max_height_in_items=-1)",
         "The old Combo() api are helpers over BeginCombo()/EndCombo() which are kept available for convenience purpose. This is analogous to how ListBox are created.",
         [](VM* vm, ArgsView args){
             const char* label = CAST(CString, args[0]);
@@ -881,7 +881,7 @@ R"(
 
     // Widgets: Regular Sliders
 #define BIND_SLIDER_FLOAT(name)   \
-vm->bind(imgui, #name "(label: str, v: void_p, v_min, v_max, format='%.3f', flags=0) -> bool",  \
+vm->bind(imgui, #name "(label: str, v: float_p, v_min, v_max, format='%.3f', flags=0) -> bool",  \
     [](VM* vm, ArgsView args){  \
         const char* label = CAST(CString, args[0]); \
         float* v = CAST(float*, args[1]);   \
@@ -901,7 +901,7 @@ vm->bind(imgui, #name "(label: str, v: void_p, v_min, v_max, format='%.3f', flag
 #undef BIND_SLIDER_FLOAT
 
 #define BIND_SLIDER_INT(name)   \
-vm->bind(imgui, #name "(label: str, v: void_p, v_min, v_max, format='%d', flags=0) -> bool",  \
+vm->bind(imgui, #name "(label: str, v: int_p, v_min, v_max, format='%d', flags=0) -> bool",  \
     [](VM* vm, ArgsView args){  \
         const char* label = CAST(CString, args[0]); \
         int* v = CAST(int*, args[1]);   \
@@ -933,7 +933,7 @@ vm->bind(imgui, #name "(label: str, v: void_p, v_min, v_max, format='%d', flags=
     IMGUI_API bool          InputInt3(const char* label, int v[3], ImGuiInputTextFlags flags = 0);
     IMGUI_API bool          InputInt4(const char* label, int v[4], ImGuiInputTextFlags flags = 0);
     
-    vm->bind(imgui, "InputText(label: str, buf: void_p, buf_size: int, flags=0)",
+    vm->bind(imgui, "InputText(label: str, buf: char_p, buf_size: int, flags=0)",
         [](VM* vm, ArgsView args){
             const char* label = CAST(CString, args[0]);
             char* buf = CAST(char*, args[1]);
@@ -943,7 +943,7 @@ vm->bind(imgui, #name "(label: str, v: void_p, v_min, v_max, format='%d', flags=
             return VAR(ret);
         });
 
-    vm->bind(imgui, "InputTextMultiline(label: str, buf: void_p, buf_size: int, size: vec2 = None, flags=0)",
+    vm->bind(imgui, "InputTextMultiline(label: str, buf: char_p, buf_size: int, size: vec2 = None, flags=0)",
         [](VM* vm, ArgsView args){
             const char* label = CAST(CString, args[0]);
             char* buf = CAST(char*, args[1]);
@@ -954,7 +954,7 @@ vm->bind(imgui, #name "(label: str, v: void_p, v_min, v_max, format='%d', flags=
             return VAR(ret);
         });
 
-    vm->bind(imgui, "InputTextWithHint(label: str, hint: str, buf: void_p, buf_size: int, flags=0)",
+    vm->bind(imgui, "InputTextWithHint(label: str, hint: str, buf: char_p, buf_size: int, flags=0)",
         [](VM* vm, ArgsView args){
             const char* label = CAST(CString, args[0]);
             const char* hint = CAST(CString, args[1]);
@@ -965,7 +965,7 @@ vm->bind(imgui, #name "(label: str, v: void_p, v_min, v_max, format='%d', flags=
             return VAR(ret);
         });
 
-    vm->bind(imgui, "InputFloat(label: str, v: void_p, step=0.0, step_fast=0.0, format='%.3f', flags=0)",
+    vm->bind(imgui, "InputFloat(label: str, v: float_p, step=0.0, step_fast=0.0, format='%.3f', flags=0)",
         [](VM* vm, ArgsView args){
             const char* label = CAST(CString, args[0]);
             float* v = CAST(float*, args[1]);
@@ -978,7 +978,7 @@ vm->bind(imgui, #name "(label: str, v: void_p, v_min, v_max, format='%d', flags=
         });
 
 #define BIND_INPUT_FLOAT(name)  \
-vm->bind(imgui, #name "(label: str, v: void_p, format='%.3f', flags=0) -> bool",  \
+vm->bind(imgui, #name "(label: str, v: float_p, format='%.3f', flags=0) -> bool",  \
     [](VM* vm, ArgsView args){  \
         const char* label = CAST(CString, args[0]); \
         float* v = CAST(float*, args[1]);   \
@@ -993,7 +993,7 @@ vm->bind(imgui, #name "(label: str, v: void_p, format='%.3f', flags=0) -> bool",
 
 #undef BIND_INPUT_FLOAT
 
-    vm->bind(imgui, "InputInt(label: str, v: void_p, step=1, step_fast=100, flags=0)",
+    vm->bind(imgui, "InputInt(label: str, v: int_p, step=1, step_fast=100, flags=0)",
         [](VM* vm, ArgsView args){
             const char* label = CAST(CString, args[0]);
             int* v = CAST(int*, args[1]);
@@ -1005,7 +1005,7 @@ vm->bind(imgui, #name "(label: str, v: void_p, format='%.3f', flags=0) -> bool",
         });
 
 #define BIND_INPUT_INT(name)  \
-vm->bind(imgui, #name "(label: str, v: void_p, flags=0) -> bool",  \
+vm->bind(imgui, #name "(label: str, v: int_p, flags=0) -> bool",  \
     [](VM* vm, ArgsView args){  \
         const char* label = CAST(CString, args[0]); \
         int* v = CAST(int*, args[1]);   \

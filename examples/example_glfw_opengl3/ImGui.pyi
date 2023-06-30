@@ -1,5 +1,177 @@
-from c import void_p
+from c import *
 from linalg import vec2, vec3, vec4
+
+def GetCursorStartPos() -> vec2:
+    """initial cursor position in window coordinates"""
+
+def IsAnyItemHovered() -> bool:
+    """is any item hovered?"""
+
+def SetScrollHereX(center_x_ratio=0.5):
+    """adjust scrolling amount to make current cursor position visible. center_x_ratio=0.0: left, 0.5: center, 1.0: right. When using to make a "default/current item" visible, consider using SetItemDefaultFocus() instead."""
+
+def SliderInt4(label: str, v: int_p, v_min, v_max, format='%d', flags=0) -> bool:
+    pass
+
+def GetClipboardText() -> str:
+    pass
+
+def EndFrame():
+    """ends the Dear ImGui frame. automatically called by Render(). If you don't need to render data (skipping rendering) you may call EndFrame() without Render()... but you'll have wasted CPU already! If you don't need to render, better to not create any windows and not call NewFrame() at all!"""
+
+def GetCursorScreenPos() -> vec2:
+    """cursor position in absolute screen coordinates (0..io.DisplaySize) or natural OS coordinates when using multiple viewport. useful to work with ImDrawList API."""
+
+def IsAnyItemActive() -> bool:
+    """is any item active?"""
+
+def SetClipboardText(text: str) -> None:
+    pass
+
+def Render():
+    """ends the Dear ImGui frame, finalize the draw data. You can then get call GetDrawData()."""
+
+def SetCursorScreenPos(pos: vec2):
+    """cursor position in absolute screen coordinates (0..io.DisplaySize) or natural OS coordinates when using multiple viewport. useful to work with ImDrawList API."""
+
+def IsAnyItemFocused() -> bool:
+    """is any item focused?"""
+
+def SetScrollHereY(center_y_ratio=0.5):
+    """adjust scrolling amount to make current cursor position visible. center_y_ratio=0.0: top, 0.5: center, 1.0: bottom. When using to make a "default/current item" visible, consider using SetItemDefaultFocus() instead."""
+
+def GetDrawData() -> void_p:
+    """valid after Render() and until the next call to NewFrame(). this is what you have to render."""
+
+def AlignTextToFramePadding():
+    """vertically align/lower upcoming text to FramePadding.y so that it will aligns to upcoming widgets (call if you have text on a line before regular widgets)"""
+
+def GetItemRectMin() -> vec2:
+    """get upper-left bounding rectangle of the last item (screen space)"""
+
+def InputText(label: str, buf: char_p, buf_size: int, flags=0):
+    pass
+
+def GetTextLineHeight() -> float:
+    """~ FontSize"""
+
+def GetItemRectMax() -> vec2:
+    """get lower-right bounding rectangle of the last item (screen space)"""
+
+def SetScrollFromPosX(local_x: float, center_x_ratio=0.5):
+    """adjust scrolling amount to make given position visible. Generally GetCursorStartPos() + offset to compute a valid position."""
+
+def InputTextMultiline(label: str, buf: char_p, buf_size: int, size: vec2 = None, flags=0):
+    pass
+
+def ShowDemoWindow(p_open: bool_p = None):
+    """create Demo window. demonstrate most ImGui features. call this to learn about the library! try to make it always available in your application!"""
+
+def GetTextLineHeightWithSpacing() -> float:
+    """~ FontSize + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of text)"""
+
+def GetItemRectSize() -> vec2:
+    """get size of last item"""
+
+def GetVersion() -> str:
+    """get the compiled version string e.g. "1.80 WIP" (essentially the value for IMGUI_VERSION from the compiled version of imgui.cpp)"""
+
+def GetFrameHeight() -> float:
+    """~ FontSize + style.FramePadding.y * 2"""
+
+def SetItemAllowOverlap():
+    """allow last item to be overlapped by a subsequent item. sometimes useful with invisible buttons, selectables, etc. to catch unused area."""
+
+def SetScrollFromPosY(local_y: float, center_y_ratio=0.5):
+    """adjust scrolling amount to make given position visible. Generally GetCursorStartPos() + offset to compute a valid position."""
+
+def InputTextWithHint(label: str, hint: str, buf: char_p, buf_size: int, flags=0):
+    pass
+
+def StyleColorsDark():
+    """new, recommended style (default)"""
+
+def GetFrameHeightWithSpacing() -> float:
+    """~ FontSize + style.FramePadding.y * 2 + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of framed widgets)"""
+
+def GetMainViewport() -> void_p:
+    pass
+
+def StyleColorsLight():
+    """best used with borders and a custom, thicker font"""
+
+def PushID(x):
+    pass
+
+def GetBackgroundDrawList() -> void_p:
+    """get background draw list for the current active window."""
+
+def PushFont(font: void_p):
+    """use None as a shortcut to push default font"""
+
+def InputFloat(label: str, v: float_p, step=0.0, step_fast=0.0, format='%.3f', flags=0):
+    pass
+
+def StyleColorsClassic():
+    """classic imgui style"""
+
+def unknown(*args, **kwargs):
+    pass
+
+def GetForegroundDrawList() -> void_p:
+    """get foreground draw list for the current active window."""
+
+def PopFont():
+    pass
+
+def InputFloat2(label: str, v: float_p, format='%.3f', flags=0) -> bool:
+    pass
+
+def Text(s: str):
+    pass
+
+def IsRectVisible(size: vec2) -> bool:
+    """test if rectangle (of given size, starting from cursor position) is visible / not clipped."""
+
+def InputFloat3(label: str, v: float_p, format='%.3f', flags=0) -> bool:
+    pass
+
+def Begin(name: str, p_open: bool_p = None, flags=0) -> bool:
+    """- Begin() = push window to the stack and start appending to it. End() = pop window from the stack.
+- Passing 'bool* p_open != NULL' shows a window-closing widget in the upper-right corner of the window,
+    which clicking will set the boolean to false when clicked.
+- You may append multiple times to the same window during the same frame by calling Begin()/End() pairs multiple times.
+    Some information such as 'flags' or 'p_open' will only be considered by the first call to Begin().
+- Begin() return false to indicate the window is collapsed or fully clipped, so you may early out and omit submitting
+    anything to the window. Always call a matching End() for each Begin() call, regardless of its return value!
+    [Important: due to legacy reason, this is inconsistent with most other functions such as BeginMenu/EndMenu,
+    BeginPopup/EndPopup, etc. where the EndXXX call should only be called if the corresponding BeginXXX function
+    returned true. Begin and BeginChild are the only odd ones out. Will be fixed in a future update.]
+- Note that the bottom of window stack always contains a window called 'Debug'."""
+
+def TextColored(col: vec4, s: str):
+    pass
+
+def GetTime() -> float:
+    """get global imgui time. incremented by io.DeltaTime every frame."""
+
+def InputFloat4(label: str, v: float_p, format='%.3f', flags=0) -> bool:
+    pass
+
+def End():
+    pass
+
+def TextDisabled(s: str):
+    pass
+
+def GetFrameCount() -> int:
+    """get global imgui frame count. incremented by 1 every frame."""
+
+def PushStyleColor(idx: int, col: vec4):
+    """modify a style color. always use this if you modify the style after NewFrame()."""
+
+def InputInt(label: str, v: int_p, step=1, step_fast=100, flags=0):
+    pass
 
 def TextWrapped(s: str):
     pass
@@ -10,13 +182,13 @@ def GetDrawListSharedData() -> void_p:
 def PopStyleColor(count=1):
     pass
 
-def InputInt2(label: str, v: void_p, flags=0) -> bool:
+def InputInt2(label: str, v: int_p, flags=0) -> bool:
     pass
 
 def GetStyleColorName(idx: int) -> str:
     """get a string corresponding to the enum value (for display, saving, etc.)."""
 
-def InputInt3(label: str, v: void_p, flags=0) -> bool:
+def InputInt3(label: str, v: int_p, flags=0) -> bool:
     pass
 
 def BeginChild(str_id: str, size=None, border=False, flags=0):
@@ -34,7 +206,7 @@ def LabelText(label: str, s: str):
 def PushStyleVar(idx: int, val: vec2):
     """modify a style ImVec2 variable. always use this if you modify the style after NewFrame()."""
 
-def InputInt4(label: str, v: void_p, flags=0) -> bool:
+def InputInt4(label: str, v: int_p, flags=0) -> bool:
     pass
 
 def EndChild():
@@ -127,7 +299,7 @@ def BeginPopup(str_id: str, flags: int = 0) -> bool:
 def GetWindowSize() -> vec2:
     """get current window size"""
 
-def Checkbox(label: str, v: void_p) -> bool:
+def Checkbox(label: str, v: bool_p) -> bool:
     pass
 
 def IsKeyDown(key: int) -> bool:
@@ -151,7 +323,7 @@ def EndPopup():
 def GetWindowHeight() -> float:
     """get current window height (shortcut for GetWindowSize().y)"""
 
-def CheckboxFlags(label: str, flags: void_p, flags_value: int) -> bool:
+def CheckboxFlags(label: str, flags: int_p, flags_value: int) -> bool:
     pass
 
 def IsKeyReleased(key: int) -> bool:
@@ -342,7 +514,7 @@ def IsItemActive() -> bool:
 def GetWindowContentRegionMax() -> vec2:
     """content boundaries max (roughly (0,0)+Size-Scroll) where Size can be override with SetNextWindowContentSize(), in window coordinates"""
 
-def Combo(label: str, current_item: void_p, items: list[str], popup_max_height_in_items=-1):
+def Combo(label: str, current_item: int_p, items: list[str], popup_max_height_in_items=-1):
     """The old Combo() api are helpers over BeginCombo()/EndCombo() which are kept available for convenience purpose. This is analogous to how ListBox are created."""
 
 def GetMousePos() -> vec2:
@@ -375,7 +547,7 @@ def GetCursorPos() -> vec2:
 def IsItemClicked(mouse_button: int = 0) -> bool:
     """is the last item hovered and mouse clicked on? (**)  == IsMouseClicked(mouse_button) && IsItemHovered()Important. (**) this is NOT equivalent to the behavior of e.g. Button(). Read comments in function definition."""
 
-def SliderFloat(label: str, v: void_p, v_min, v_max, format='%.3f', flags=0) -> bool:
+def SliderFloat(label: str, v: float_p, v_min, v_max, format='%.3f', flags=0) -> bool:
     pass
 
 def IsMouseDragging(button: int, lock_threshold=-1.0) -> bool:
@@ -390,7 +562,7 @@ def IsItemVisible() -> bool:
 def SetScrollX(scroll_x: float):
     """set scrolling amount [0 .. GetScrollMaxX()]"""
 
-def SliderFloat2(label: str, v: void_p, v_min, v_max, format='%.3f', flags=0) -> bool:
+def SliderFloat2(label: str, v: float_p, v_min, v_max, format='%.3f', flags=0) -> bool:
     pass
 
 def GetMouseDragDelta(button: int=0, lock_threshold=-1.0) -> vec2:
@@ -405,7 +577,7 @@ def GetCursorPosY() -> float:
 def IsItemEdited() -> bool:
     """did the last item modify its underlying value this frame? or was pressed? This is generally the same as the "bool" return value of many widgets."""
 
-def SliderFloat3(label: str, v: void_p, v_min, v_max, format='%.3f', flags=0) -> bool:
+def SliderFloat3(label: str, v: float_p, v_min, v_max, format='%.3f', flags=0) -> bool:
     pass
 
 def ResetMouseDragDelta(button: int=0) -> None:
@@ -420,7 +592,7 @@ def IsItemActivated() -> bool:
 def SetScrollY(scroll_y: float):
     """set scrolling amount [0 .. GetScrollMaxY()]"""
 
-def SliderFloat4(label: str, v: void_p, v_min, v_max, format='%.3f', flags=0) -> bool:
+def SliderFloat4(label: str, v: float_p, v_min, v_max, format='%.3f', flags=0) -> bool:
     pass
 
 def GetMouseCursor() -> int:
@@ -438,7 +610,7 @@ def IsItemDeactivated() -> bool:
 def GetScrollMaxX():
     """get maximum scrolling amount ~~ ContentSize.x - WindowSize.x - DecorationsSize.x"""
 
-def SliderInt(label: str, v: void_p, v_min, v_max, format='%d', flags=0) -> bool:
+def SliderInt(label: str, v: int_p, v_min, v_max, format='%d', flags=0) -> bool:
     pass
 
 def SetMouseCursor(type: int) -> None:
@@ -456,7 +628,7 @@ def IsItemDeactivatedAfterEdit() -> bool:
 def GetScrollMaxY():
     """get maximum scrolling amount ~~ ContentSize.y - WindowSize.y - DecorationsSize.y"""
 
-def SliderInt2(label: str, v: void_p, v_min, v_max, format='%d', flags=0) -> bool:
+def SliderInt2(label: str, v: int_p, v_min, v_max, format='%d', flags=0) -> bool:
     pass
 
 def GetStyle() -> void_p:
@@ -468,7 +640,7 @@ def SetCursorPosY(local_y: float):
 def IsItemToggledOpen() -> bool:
     """was the last item open state toggled? set by TreeNode()."""
 
-def SliderInt3(label: str, v: void_p, v_min, v_max, format='%d', flags=0) -> bool:
+def SliderInt3(label: str, v: int_p, v_min, v_max, format='%d', flags=0) -> bool:
     pass
 
 def SetNextFrameWantCaptureMouse(want_capture_mouse: bool):
@@ -477,179 +649,139 @@ def SetNextFrameWantCaptureMouse(want_capture_mouse: bool):
 def NewFrame():
     """start a new Dear ImGui frame, you can submit any command from this point until Render()/EndFrame()."""
 
-def GetCursorStartPos() -> vec2:
-    """initial cursor position in window coordinates"""
 
-def IsAnyItemHovered() -> bool:
-    """is any item hovered?"""
-
-def SetScrollHereX(center_x_ratio=0.5):
-    """adjust scrolling amount to make current cursor position visible. center_x_ratio=0.0: left, 0.5: center, 1.0: right. When using to make a "default/current item" visible, consider using SetItemDefaultFocus() instead."""
-
-def SliderInt4(label: str, v: void_p, v_min, v_max, format='%d', flags=0) -> bool:
-    pass
-
-def GetClipboardText() -> str:
-    pass
-
-def EndFrame():
-    """ends the Dear ImGui frame. automatically called by Render(). If you don't need to render data (skipping rendering) you may call EndFrame() without Render()... but you'll have wasted CPU already! If you don't need to render, better to not create any windows and not call NewFrame() at all!"""
-
-def GetCursorScreenPos() -> vec2:
-    """cursor position in absolute screen coordinates (0..io.DisplaySize) or natural OS coordinates when using multiple viewport. useful to work with ImDrawList API."""
-
-def IsAnyItemActive() -> bool:
-    """is any item active?"""
-
-def SetClipboardText(text: str) -> None:
-    pass
-
-def Render():
-    """ends the Dear ImGui frame, finalize the draw data. You can then get call GetDrawData()."""
-
-def SetCursorScreenPos(pos: vec2):
-    """cursor position in absolute screen coordinates (0..io.DisplaySize) or natural OS coordinates when using multiple viewport. useful to work with ImDrawList API."""
-
-def IsAnyItemFocused() -> bool:
-    """is any item focused?"""
-
-def SetScrollHereY(center_y_ratio=0.5):
-    """adjust scrolling amount to make current cursor position visible. center_y_ratio=0.0: top, 0.5: center, 1.0: bottom. When using to make a "default/current item" visible, consider using SetItemDefaultFocus() instead."""
-
-def GetDrawData() -> void_p:
-    """valid after Render() and until the next call to NewFrame(). this is what you have to render."""
-
-def AlignTextToFramePadding():
-    """vertically align/lower upcoming text to FramePadding.y so that it will aligns to upcoming widgets (call if you have text on a line before regular widgets)"""
-
-def GetItemRectMin() -> vec2:
-    """get upper-left bounding rectangle of the last item (screen space)"""
-
-def InputText(label: str, buf: void_p, buf_size: int, flags=0):
-    pass
-
-def GetTextLineHeight() -> float:
-    """~ FontSize"""
-
-def GetItemRectMax() -> vec2:
-    """get lower-right bounding rectangle of the last item (screen space)"""
-
-def SetScrollFromPosX(local_x: float, center_x_ratio=0.5):
-    """adjust scrolling amount to make given position visible. Generally GetCursorStartPos() + offset to compute a valid position."""
-
-def InputTextMultiline(label: str, buf: void_p, buf_size: int, size: vec2 = None, flags=0):
-    pass
-
-def ShowDemoWindow(p_open: void_p = None):
-    """create Demo window. demonstrate most ImGui features. call this to learn about the library! try to make it always available in your application!"""
-
-def GetTextLineHeightWithSpacing() -> float:
-    """~ FontSize + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of text)"""
-
-def GetItemRectSize() -> vec2:
-    """get size of last item"""
-
-def GetVersion() -> str:
-    """get the compiled version string e.g. "1.80 WIP" (essentially the value for IMGUI_VERSION from the compiled version of imgui.cpp)"""
-
-def GetFrameHeight() -> float:
-    """~ FontSize + style.FramePadding.y * 2"""
-
-def SetItemAllowOverlap():
-    """allow last item to be overlapped by a subsequent item. sometimes useful with invisible buttons, selectables, etc. to catch unused area."""
-
-def SetScrollFromPosY(local_y: float, center_y_ratio=0.5):
-    """adjust scrolling amount to make given position visible. Generally GetCursorStartPos() + offset to compute a valid position."""
-
-def InputTextWithHint(label: str, hint: str, buf: void_p, buf_size: int, flags=0):
-    pass
-
-def StyleColorsDark():
-    """new, recommended style (default)"""
-
-def GetFrameHeightWithSpacing() -> float:
-    """~ FontSize + style.FramePadding.y * 2 + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of framed widgets)"""
-
-def GetMainViewport() -> void_p:
-    pass
-
-def StyleColorsLight():
-    """best used with borders and a custom, thicker font"""
-
-def PushID(x):
-    pass
-
-def GetBackgroundDrawList() -> void_p:
-    """get background draw list for the current active window."""
-
-def PushFont(font: void_p):
-    """use None as a shortcut to push default font"""
-
-def InputFloat(label: str, v: void_p, step=0.0, step_fast=0.0, format='%.3f', flags=0):
-    pass
-
-def StyleColorsClassic():
-    """classic imgui style"""
-
-def unknown(*args, **kwargs):
-    pass
-
-def GetForegroundDrawList() -> void_p:
-    """get foreground draw list for the current active window."""
-
-def PopFont():
-    pass
-
-def InputFloat2(label: str, v: void_p, format='%.3f', flags=0) -> bool:
-    pass
-
-def Text(s: str):
-    pass
-
-def IsRectVisible(size: vec2) -> bool:
-    """test if rectangle (of given size, starting from cursor position) is visible / not clipped."""
-
-def InputFloat3(label: str, v: void_p, format='%.3f', flags=0) -> bool:
-    pass
-
-def Begin(name: str, p_open: void_p = None, flags=0) -> bool:
-    """- Begin() = push window to the stack and start appending to it. End() = pop window from the stack.
-- Passing 'bool* p_open != NULL' shows a window-closing widget in the upper-right corner of the window,
-    which clicking will set the boolean to false when clicked.
-- You may append multiple times to the same window during the same frame by calling Begin()/End() pairs multiple times.
-    Some information such as 'flags' or 'p_open' will only be considered by the first call to Begin().
-- Begin() return false to indicate the window is collapsed or fully clipped, so you may early out and omit submitting
-    anything to the window. Always call a matching End() for each Begin() call, regardless of its return value!
-    [Important: due to legacy reason, this is inconsistent with most other functions such as BeginMenu/EndMenu,
-    BeginPopup/EndPopup, etc. where the EndXXX call should only be called if the corresponding BeginXXX function
-    returned true. Begin and BeginChild are the only odd ones out. Will be fixed in a future update.]
-- Note that the bottom of window stack always contains a window called 'Debug'."""
-
-def TextColored(col: vec4, s: str):
-    pass
-
-def GetTime() -> float:
-    """get global imgui time. incremented by io.DeltaTime every frame."""
-
-def InputFloat4(label: str, v: void_p, format='%.3f', flags=0) -> bool:
-    pass
-
-def End():
-    pass
-
-def TextDisabled(s: str):
-    pass
-
-def GetFrameCount() -> int:
-    """get global imgui frame count. incremented by 1 every frame."""
-
-def PushStyleColor(idx: int, col: vec4):
-    """modify a style color. always use this if you modify the style after NewFrame()."""
-
-def InputInt(label: str, v: void_p, step=1, step_fast=100, flags=0):
-    pass
-
-
+ImGuiKey_GamepadL1 = 627
+ImGuiCol_TabActive = 35
+ImGuiCond_Always = 1
+ImGuiSelectableFlags_AllowDoubleClick = 4
+ImGuiHoveredFlags_RootWindow = 2
+ImGuiKey_F2 = 573
+ImGuiNavInput_FocusPrev = 12
+ImGuiColorEditFlags_NoAlpha = 2
+ImGuiTableFlags_NoHostExtendX = 65536
+ImGuiKey_Home = 519
+ImGuiKey_GamepadR1 = 628
+ImGuiCol_TabUnfocused = 36
+ImGuiCond_Once = 2
+ImGuiSelectableFlags_Disabled = 8
+ImGuiHoveredFlags_AnyWindow = 4
+ImGuiKey_F3 = 574
+ImGuiNavInput_FocusNext = 13
+ImGuiColorEditFlags_NoPicker = 4
+ImGuiTableFlags_NoHostExtendY = 131072
+ImGuiKey_End = 520
+ImGuiKey_GamepadL2 = 629
+ImGuiCol_TabUnfocusedActive = 37
+ImGuiCond_FirstUseEver = 4
+ImGuiSelectableFlags_AllowItemOverlap = 16
+ImGuiHoveredFlags_NoPopupHierarchy = 8
+ImGuiKey_F4 = 575
+ImGuiNavInput_TweakSlow = 14
+ImGuiColorEditFlags_NoOptions = 8
+ImGuiInputTextFlags_None = 0
+ImGuiTableFlags_NoKeepColumnsVisible = 262144
+ImGuiKey_Insert = 521
+ImGuiKey_GamepadR2 = 630
+ImGuiCol_PlotLines = 38
+ImGuiCond_Appearing = 8
+ImGuiComboFlags_None = 0
+ImGuiHoveredFlags_AllowWhenBlockedByPopup = 32
+ImGuiKey_F5 = 576
+ImGuiNavInput_TweakFast = 15
+ImGuiColorEditFlags_NoSmallPreview = 16
+ImGuiInputTextFlags_CharsDecimal = 1
+ImGuiTableFlags_PreciseWidths = 524288
+ImGuiKey_Delete = 522
+ImGuiKey_GamepadL3 = 631
+ImGuiCol_PlotLinesHovered = 39
+ImGuiComboFlags_PopupAlignLeft = 1
+ImGuiHoveredFlags_AllowWhenBlockedByActiveItem = 128
+ImGuiKey_F6 = 577
+ImGuiNavInput_COUNT = 16
+ImGuiColorEditFlags_NoInputs = 32
+ImGuiInputTextFlags_CharsHexadecimal = 2
+ImGuiTableFlags_NoClip = 1048576
+ImGuiKey_Backspace = 523
+ImGuiKey_GamepadR3 = 632
+ImGuiCol_PlotHistogram = 40
+ImGuiComboFlags_HeightSmall = 2
+ImGuiHoveredFlags_AllowWhenOverlapped = 256
+ImGuiKey_F7 = 578
+ImGuiConfigFlags_None = 0
+ImGuiColorEditFlags_NoTooltip = 64
+ImGuiInputTextFlags_CharsUppercase = 4
+ImGuiTableFlags_PadOuterX = 2097152
+ImGuiKey_Space = 524
+ImGuiKey_GamepadLStickLeft = 633
+ImGuiCol_PlotHistogramHovered = 41
+ImGuiComboFlags_HeightRegular = 4
+ImGuiHoveredFlags_AllowWhenDisabled = 512
+ImGuiKey_F8 = 579
+ImGuiConfigFlags_NavEnableKeyboard = 1
+ImGuiColorEditFlags_NoLabel = 128
+ImGuiInputTextFlags_CharsNoBlank = 8
+ImGuiTableFlags_NoPadOuterX = 4194304
+ImGuiKey_Enter = 525
+ImGuiKey_GamepadLStickRight = 634
+ImGuiCol_TableHeaderBg = 42
+ImGuiComboFlags_HeightLarge = 8
+ImGuiHoveredFlags_NoNavOverride = 1024
+ImGuiKey_F9 = 580
+ImGuiConfigFlags_NavEnableGamepad = 2
+ImGuiColorEditFlags_NoSidePreview = 256
+ImGuiInputTextFlags_AutoSelectAll = 16
+ImGuiTableFlags_NoPadInnerX = 8388608
+ImGuiKey_Escape = 526
+ImGuiKey_GamepadLStickUp = 635
+ImGuiCol_TableBorderStrong = 43
+ImGuiComboFlags_HeightLargest = 16
+ImGuiHoveredFlags_RectOnly = 416
+ImGuiKey_F10 = 581
+ImGuiConfigFlags_NavEnableSetMousePos = 4
+ImGuiColorEditFlags_NoDragDrop = 512
+ImGuiInputTextFlags_EnterReturnsTrue = 32
+ImGuiTableFlags_ScrollX = 16777216
+ImGuiKey_LeftCtrl = 527
+ImGuiKey_GamepadLStickDown = 636
+ImGuiCol_TableBorderLight = 44
+ImGuiComboFlags_NoArrowButton = 32
+ImGuiHoveredFlags_RootAndChildWindows = 3
+ImGuiKey_F11 = 582
+ImGuiConfigFlags_NavNoCaptureKeyboard = 8
+ImGuiColorEditFlags_NoBorder = 1024
+ImGuiInputTextFlags_CallbackCompletion = 64
+ImGuiTableFlags_ScrollY = 33554432
+ImGuiKey_LeftShift = 528
+ImGuiKey_GamepadRStickLeft = 637
+ImGuiCol_TableRowBg = 45
+ImGuiComboFlags_NoPreview = 64
+ImGuiHoveredFlags_ForTooltip = 2048
+ImGuiKey_F12 = 583
+ImGuiConfigFlags_NoMouse = 16
+ImGuiColorEditFlags_AlphaBar = 65536
+ImGuiInputTextFlags_CallbackHistory = 128
+ImGuiTableFlags_SortMulti = 67108864
+ImGuiKey_LeftAlt = 529
+ImGuiKey_GamepadRStickRight = 638
+ImGuiCol_TableRowBgAlt = 46
+ImGuiComboFlags_HeightMask_ = 30
+ImGuiHoveredFlags_Stationary = 4096
+ImGuiKey_Apostrophe = 584
+ImGuiConfigFlags_NoMouseCursorChange = 32
+ImGuiColorEditFlags_AlphaPreview = 131072
+ImGuiInputTextFlags_CallbackAlways = 256
+ImGuiTableFlags_SortTristate = 134217728
+ImGuiKey_LeftSuper = 530
+ImGuiKey_GamepadRStickUp = 639
+ImGuiCol_TextSelectedBg = 47
+ImGuiTabBarFlags_None = 0
+ImGuiHoveredFlags_DelayNone = 8192
+ImGuiKey_Comma = 585
+ImGuiConfigFlags_IsSRGB = 1048576
+ImGuiColorEditFlags_AlphaPreviewHalf = 262144
+ImGuiInputTextFlags_CallbackCharFilter = 512
+ImGuiTableFlags_SizingMask_ = 57344
+ImGuiKey_RightCtrl = 531
 ImGuiKey_GamepadRStickDown = 640
 ImGuiCol_DragDropTarget = 48
 ImGuiTabBarFlags_Reorderable = 1
@@ -1073,135 +1205,3 @@ ImGuiNavInput_LStickDown = 11
 ImGuiColorEditFlags_None = 0
 ImGuiTableFlags_SizingStretchSame = 32768
 ImGuiKey_PageDown = 518
-ImGuiKey_GamepadL1 = 627
-ImGuiCol_TabActive = 35
-ImGuiCond_Always = 1
-ImGuiSelectableFlags_AllowDoubleClick = 4
-ImGuiHoveredFlags_RootWindow = 2
-ImGuiKey_F2 = 573
-ImGuiNavInput_FocusPrev = 12
-ImGuiColorEditFlags_NoAlpha = 2
-ImGuiTableFlags_NoHostExtendX = 65536
-ImGuiKey_Home = 519
-ImGuiKey_GamepadR1 = 628
-ImGuiCol_TabUnfocused = 36
-ImGuiCond_Once = 2
-ImGuiSelectableFlags_Disabled = 8
-ImGuiHoveredFlags_AnyWindow = 4
-ImGuiKey_F3 = 574
-ImGuiNavInput_FocusNext = 13
-ImGuiColorEditFlags_NoPicker = 4
-ImGuiTableFlags_NoHostExtendY = 131072
-ImGuiKey_End = 520
-ImGuiKey_GamepadL2 = 629
-ImGuiCol_TabUnfocusedActive = 37
-ImGuiCond_FirstUseEver = 4
-ImGuiSelectableFlags_AllowItemOverlap = 16
-ImGuiHoveredFlags_NoPopupHierarchy = 8
-ImGuiKey_F4 = 575
-ImGuiNavInput_TweakSlow = 14
-ImGuiColorEditFlags_NoOptions = 8
-ImGuiInputTextFlags_None = 0
-ImGuiTableFlags_NoKeepColumnsVisible = 262144
-ImGuiKey_Insert = 521
-ImGuiKey_GamepadR2 = 630
-ImGuiCol_PlotLines = 38
-ImGuiCond_Appearing = 8
-ImGuiComboFlags_None = 0
-ImGuiHoveredFlags_AllowWhenBlockedByPopup = 32
-ImGuiKey_F5 = 576
-ImGuiNavInput_TweakFast = 15
-ImGuiColorEditFlags_NoSmallPreview = 16
-ImGuiInputTextFlags_CharsDecimal = 1
-ImGuiTableFlags_PreciseWidths = 524288
-ImGuiKey_Delete = 522
-ImGuiKey_GamepadL3 = 631
-ImGuiCol_PlotLinesHovered = 39
-ImGuiComboFlags_PopupAlignLeft = 1
-ImGuiHoveredFlags_AllowWhenBlockedByActiveItem = 128
-ImGuiKey_F6 = 577
-ImGuiNavInput_COUNT = 16
-ImGuiColorEditFlags_NoInputs = 32
-ImGuiInputTextFlags_CharsHexadecimal = 2
-ImGuiTableFlags_NoClip = 1048576
-ImGuiKey_Backspace = 523
-ImGuiKey_GamepadR3 = 632
-ImGuiCol_PlotHistogram = 40
-ImGuiComboFlags_HeightSmall = 2
-ImGuiHoveredFlags_AllowWhenOverlapped = 256
-ImGuiKey_F7 = 578
-ImGuiConfigFlags_None = 0
-ImGuiColorEditFlags_NoTooltip = 64
-ImGuiInputTextFlags_CharsUppercase = 4
-ImGuiTableFlags_PadOuterX = 2097152
-ImGuiKey_Space = 524
-ImGuiKey_GamepadLStickLeft = 633
-ImGuiCol_PlotHistogramHovered = 41
-ImGuiComboFlags_HeightRegular = 4
-ImGuiHoveredFlags_AllowWhenDisabled = 512
-ImGuiKey_F8 = 579
-ImGuiConfigFlags_NavEnableKeyboard = 1
-ImGuiColorEditFlags_NoLabel = 128
-ImGuiInputTextFlags_CharsNoBlank = 8
-ImGuiTableFlags_NoPadOuterX = 4194304
-ImGuiKey_Enter = 525
-ImGuiKey_GamepadLStickRight = 634
-ImGuiCol_TableHeaderBg = 42
-ImGuiComboFlags_HeightLarge = 8
-ImGuiHoveredFlags_NoNavOverride = 1024
-ImGuiKey_F9 = 580
-ImGuiConfigFlags_NavEnableGamepad = 2
-ImGuiColorEditFlags_NoSidePreview = 256
-ImGuiInputTextFlags_AutoSelectAll = 16
-ImGuiTableFlags_NoPadInnerX = 8388608
-ImGuiKey_Escape = 526
-ImGuiKey_GamepadLStickUp = 635
-ImGuiCol_TableBorderStrong = 43
-ImGuiComboFlags_HeightLargest = 16
-ImGuiHoveredFlags_RectOnly = 416
-ImGuiKey_F10 = 581
-ImGuiConfigFlags_NavEnableSetMousePos = 4
-ImGuiColorEditFlags_NoDragDrop = 512
-ImGuiInputTextFlags_EnterReturnsTrue = 32
-ImGuiTableFlags_ScrollX = 16777216
-ImGuiKey_LeftCtrl = 527
-ImGuiKey_GamepadLStickDown = 636
-ImGuiCol_TableBorderLight = 44
-ImGuiComboFlags_NoArrowButton = 32
-ImGuiHoveredFlags_RootAndChildWindows = 3
-ImGuiKey_F11 = 582
-ImGuiConfigFlags_NavNoCaptureKeyboard = 8
-ImGuiColorEditFlags_NoBorder = 1024
-ImGuiInputTextFlags_CallbackCompletion = 64
-ImGuiTableFlags_ScrollY = 33554432
-ImGuiKey_LeftShift = 528
-ImGuiKey_GamepadRStickLeft = 637
-ImGuiCol_TableRowBg = 45
-ImGuiComboFlags_NoPreview = 64
-ImGuiHoveredFlags_ForTooltip = 2048
-ImGuiKey_F12 = 583
-ImGuiConfigFlags_NoMouse = 16
-ImGuiColorEditFlags_AlphaBar = 65536
-ImGuiInputTextFlags_CallbackHistory = 128
-ImGuiTableFlags_SortMulti = 67108864
-ImGuiKey_LeftAlt = 529
-ImGuiKey_GamepadRStickRight = 638
-ImGuiCol_TableRowBgAlt = 46
-ImGuiComboFlags_HeightMask_ = 30
-ImGuiHoveredFlags_Stationary = 4096
-ImGuiKey_Apostrophe = 584
-ImGuiConfigFlags_NoMouseCursorChange = 32
-ImGuiColorEditFlags_AlphaPreview = 131072
-ImGuiInputTextFlags_CallbackAlways = 256
-ImGuiTableFlags_SortTristate = 134217728
-ImGuiKey_LeftSuper = 530
-ImGuiKey_GamepadRStickUp = 639
-ImGuiCol_TextSelectedBg = 47
-ImGuiTabBarFlags_None = 0
-ImGuiHoveredFlags_DelayNone = 8192
-ImGuiKey_Comma = 585
-ImGuiConfigFlags_IsSRGB = 1048576
-ImGuiColorEditFlags_AlphaPreviewHalf = 262144
-ImGuiInputTextFlags_CallbackCharFilter = 512
-ImGuiTableFlags_SizingMask_ = 57344
-ImGuiKey_RightCtrl = 531
